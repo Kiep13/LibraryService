@@ -1,11 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="LibraryService:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="83851589-5774-4ecf-b2ea-4e0a6dc29587" name="Default Changelist" comment="" />
+    <list default="true" id="83851589-5774-4ecf-b2ea-4e0a6dc29587" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/LibraryService_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Interface/Registration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/LibraryService-1.0-SNAPSHOT-jar-with-dependencies.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/LibraryService-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Images/add.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Images/bookIcon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Images/delete.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Images/redact.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Interface/Registration$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Interface/Registration.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/add.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Images/add.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookIcon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Images/bookIcon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delete.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Images/delete.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redact.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Images/redact.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/AdminOpportunities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BusinessLogic/AdminOpportunities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/Buildier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BusinessLogic/Buildier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/Checking.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/DataBaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BusinessLogic/DataBaseHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/DatabaseTableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BusinessLogic/DatabaseTableModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/Program.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BusinessLogic/UserOpportunities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BusinessLogic/UserOpportunities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Data/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Data/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Data/BookFund.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Data/BookFund.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/AdminPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/AdminPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/Authorization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/Authorization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/BookFundPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/BookFundPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/BookFundRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/BookFundRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/BookPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/BookPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/BookRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/BookRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/CatalogPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/CatalogPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/LibraryPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/LibraryPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/LibraryRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/LibraryRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/LibraryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/LibraryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interface/SearchOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interface/SearchOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/AdminOpportunities.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/BusinessLogic/AdminOpportunities.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/Buildier.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/BusinessLogic/Buildier.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/Checking.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/DataBaseHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/BusinessLogic/DataBaseHelper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/DatabaseTableModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/BusinessLogic/DatabaseTableModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/Program.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/BusinessLogic/UserOpportunities.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/BusinessLogic/UserOpportunities.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Data/BookFund.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Data/BookFund.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/AdminPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/AdminPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/Authorization$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/Authorization$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/Authorization.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/Authorization.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/BookFundPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/BookFundPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/BookFundRecord.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/BookFundRecord.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/BookPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/BookPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/BookRecord.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/BookRecord.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/CatalogPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/CatalogPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/LibraryPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/LibraryPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/LibraryRecord.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/LibraryRecord.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/LibraryService$1WindowListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/LibraryService$1WindowListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/LibraryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/LibraryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Interface/SearchOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Interface/SearchOptions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/LibraryService.kotlin_module" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -23,11 +97,6 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="MySQL - @localhost" type="feb32156:DbDataSourceImpl" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - @localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
     </expand>
     <select />
   </component>
@@ -38,6 +107,16 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\Study\CourseWork\LibraryService\.idea" />
+      </set>
+    </option>
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -46,6 +125,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1ZAFHER9UVi03bLmUZXlfOaH2uR" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -54,51 +134,30 @@
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/screenshots" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Study\CourseWork\LibraryService\src\main\java" />
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Study\CourseWork\LibraryService\src" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Study\CourseWork\LibraryService\src\main\java" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Program">
-    <configuration name="AdminPanel" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Interface.AdminPanel" />
-      <module name="LibraryService" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Interface.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DataBaseHelper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BusinessLogic.DataBaseHelper" />
-      <module name="LibraryService" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="BusinessLogic.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LibraryService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager">
+    <configuration name="LibraryService" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Interface.LibraryService" />
       <module name="LibraryService" />
       <extension name="coverage">
@@ -111,25 +170,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Program" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BusinessLogic.Program" />
-      <module name="LibraryService" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="BusinessLogic.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Program" />
         <item itemvalue="Application.LibraryService" />
-        <item itemvalue="Application.AdminPanel" />
-        <item itemvalue="Application.DataBaseHelper" />
       </list>
     </recent_temporary>
   </component>
@@ -155,7 +198,37 @@
       <workItem from="1584770124403" duration="27000" />
       <workItem from="1584859206679" duration="11552000" />
       <workItem from="1584909111589" duration="506000" />
-      <workItem from="1585157302455" duration="659000" />
+      <workItem from="1585157302455" duration="3380000" />
+      <workItem from="1585160723481" duration="394000" />
+      <workItem from="1585201292511" duration="1659000" />
+      <workItem from="1585231087301" duration="14293000" />
+      <workItem from="1585318438413" duration="6191000" />
+      <workItem from="1585408968467" duration="76000" />
+      <workItem from="1585483732614" duration="717000" />
+      <workItem from="1585575640920" duration="10148000" />
+      <workItem from="1585635159383" duration="16714000" />
+      <workItem from="1585755796998" duration="8671000" />
+      <workItem from="1585804942641" duration="18096000" />
+      <workItem from="1585850983782" duration="1501000" />
+      <workItem from="1586261209460" duration="300000" />
+      <workItem from="1586261798009" duration="250000" />
+      <workItem from="1586340803757" duration="115000" />
+      <workItem from="1586352926414" duration="695000" />
+      <workItem from="1586355856080" duration="1153000" />
+      <workItem from="1586416730646" duration="552000" />
+      <workItem from="1586881747884" duration="1369000" />
+      <workItem from="1586935284748" duration="4402000" />
+      <workItem from="1586963736768" duration="1071000" />
+      <workItem from="1587400077933" duration="282000" />
+      <workItem from="1587817126536" duration="2289000" />
+      <workItem from="1588582320411" duration="3931000" />
+      <workItem from="1588663563358" duration="607000" />
+      <workItem from="1588682290773" duration="150000" />
+      <workItem from="1588684547238" duration="2050000" />
+      <workItem from="1589354319759" duration="838000" />
+      <workItem from="1589358007139" duration="643000" />
+      <workItem from="1589733209361" duration="1181000" />
+      <workItem from="1592731503590" duration="855000" />
     </task>
     <servers />
   </component>
@@ -167,78 +240,114 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="181" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1584364559280" />
-    <state x="552" y="181" key="#Project_Structure" timestamp="1584278309296">
+    <state x="552" y="181" key="#Project_Structure" timestamp="1586938055608">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="181" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1584278309296" />
+    <state x="552" y="181" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1586938055608" />
     <state x="552" y="181" key="#SQL_Dialects" timestamp="1584280021120">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="181" key="#SQL_Dialects/0.0.1920.1040@0.0.1920.1040" timestamp="1584280021120" />
-    <state x="552" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584521979638">
+    <state x="552" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589358054894">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584521979638" />
+    <state x="552" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589358054894" />
     <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser" timestamp="1584691812235">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1584691812235" />
+    <state x="754" y="263" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1586881803320">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="754" y="263" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586881803320" />
     <state x="811" y="412" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1584277959509">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="811" y="412" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584277959509" />
-    <state x="740" y="278" key="FileChooserDialogImpl" timestamp="1584770150128">
+    <state x="641" y="449" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1585160587281">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="278" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1584770150128" />
-    <state width="1877" height="152" key="GridCell.Tab.0.bottom" timestamp="1584909619645">
+    <state x="641" y="449" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585160587281" />
+    <state x="761" y="389" width="398" height="306" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1585158862319">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="152" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584909619645" />
-    <state width="1877" height="152" key="GridCell.Tab.0.center" timestamp="1584909619645">
+    <state x="761" y="389" width="398" height="306" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040@0.0.1920.1040" timestamp="1585158862319" />
+    <state x="761" y="409" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1585160590143">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="152" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584909619645" />
-    <state width="1877" height="152" key="GridCell.Tab.0.left" timestamp="1584909619645">
+    <state x="761" y="409" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.0.1920.1040@0.0.1920.1040" timestamp="1585160590143" />
+    <state x="754" y="231" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1586881996730">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="152" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584909619645" />
-    <state width="1877" height="152" key="GridCell.Tab.0.right" timestamp="1584909619645">
+    <state x="754" y="231" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586881996730" />
+    <state x="740" y="278" key="FileChooserDialogImpl" timestamp="1589735131553">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="152" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584909619645" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1584875908105">
+    <state x="740" y="278" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1589735131553" />
+    <state width="1452" height="364" key="GridCell.Tab.0.bottom" timestamp="1592731890603">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584875908105" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1584875908104">
+    <state width="1452" height="364" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1592731890603" />
+    <state width="1452" height="364" key="GridCell.Tab.0.center" timestamp="1592731890603">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584875908104" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1584875908104">
+    <state width="1452" height="364" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1592731890603" />
+    <state width="1452" height="364" key="GridCell.Tab.0.left" timestamp="1592731890603">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584875908104" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1584875908105">
+    <state width="1452" height="364" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1592731890603" />
+    <state width="1452" height="364" key="GridCell.Tab.0.right" timestamp="1592731890603">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584875908105" />
+    <state width="1452" height="364" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1592731890603" />
+    <state width="938" height="348" key="GridCell.Tab.1.bottom" timestamp="1586261511510">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586261511510" />
+    <state width="938" height="348" key="GridCell.Tab.1.center" timestamp="1586261511510">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586261511510" />
+    <state width="938" height="348" key="GridCell.Tab.1.left" timestamp="1586261511510">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586261511510" />
+    <state width="938" height="348" key="GridCell.Tab.1.right" timestamp="1586261511510">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586261511510" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1584278964713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1920.1040@0.0.1920.1040" timestamp="1584278964713" />
-    <state x="442" y="106" width="1165" height="735" key="SettingsEditor" timestamp="1584278810994">
+    <state x="490" y="178" key="Maven.ArtifactSearchDialog" timestamp="1585158671482">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="442" y="106" width="1165" height="735" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1584278810994" />
-    <state x="668" y="347" key="com.intellij.ide.util.TipDialog" timestamp="1585157631110">
+    <state x="490" y="178" key="Maven.ArtifactSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585158671482" />
+    <state x="442" y="106" width="1165" height="735" key="SettingsEditor" timestamp="1586938232086">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585157631110" />
+    <state x="442" y="106" width="1165" height="735" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586938232086" />
+    <state x="776" y="301" key="chooseDestDirectoryDialog" timestamp="1585158830376">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="776" y="301" key="chooseDestDirectoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585158830376" />
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog" timestamp="1589354533317">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589354533317" />
+    <state x="771" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1585648269930">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="771" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1585648269930" />
     <state x="690" y="306" key="extract.method.dialog" timestamp="1584525072950">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="306" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584525072950" />
+    <state x="342" y="146" key="new project wizard" timestamp="1589355163096">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="146" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1589355163096" />
     <state x="668" y="154" key="refactoring.ChangeSignatureDialog" timestamp="1584513530670">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -247,26 +356,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584451681916" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1584626153876">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1592731877366">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584626153876" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1592731877366" />
+    <state x="682" y="438" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1592732368180">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="682" y="438" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1592732368180" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/BusinessLogic/AdminOpportunities.java</url>
-          <line>571</line>
-          <option name="timeStamp" value="93" />
+          <line>375</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/BusinessLogic/DataBaseHelper.java</url>
-          <line>695</line>
-          <properties class="BusinessLogic.DataBaseHelper" method="close">
+          <url>file://$PROJECT_DIR$/src/main/java/Interface/SearchOptions.java</url>
+          <line>30</line>
+          <properties class="Interface.SearchOptions" method="&lt;init&gt;">
             <option name="EMULATED" value="true" />
           </properties>
-          <option name="timeStamp" value="102" />
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,7 +1,6 @@
 package BusinessLogic;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -12,7 +11,6 @@ public class DatabaseTableModel extends AbstractTableModel {
     private ArrayList<String> columnNames = new ArrayList<String>();
     private ArrayList<Class> columnTypes = new ArrayList<Class>();
     private ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-    private TableColumn idColumn = new TableColumn();
 
     public int getRowCount() {
         synchronized (data) {
@@ -50,13 +48,11 @@ public class DatabaseTableModel extends AbstractTableModel {
 
     public void setDataSource(ResultSet rs, String[] headers) throws SQLException, ClassNotFoundException {
         ResultSetMetaData rsmd = rs.getMetaData();
-        //columnNames.clear();
         columnTypes.clear();
         data.clear();
 
         int columnCount = rsmd.getColumnCount();
         for (int i = 0; i < columnCount; i++) {
-            //columnNames.add(rsmd.getColumnName(i + 1));
             columnNames.add(headers[i]);
             Class type = Class.forName(rsmd.getColumnClassName(i + 1));
             columnTypes.add(type);

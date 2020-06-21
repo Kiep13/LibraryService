@@ -2,7 +2,6 @@ package Interface;
 
 import BusinessLogic.AdminOpportunities;
 import BusinessLogic.DataBaseHelper;
-import BusinessLogic.UserOpportunities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,9 @@ import java.awt.event.WindowEvent;
 
 public class LibraryService extends JFrame {
 
-    public JPanel panel;
+    public static void main(String []args) {
+        new LibraryService();
+    }
 
     public LibraryService() {
 
@@ -22,16 +23,13 @@ public class LibraryService extends JFrame {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dimension.width/2 - 350, dimension.height/2 - 250);
 
-        panel = new CatalogPanel(this.getWidth(), this.getHeight());
-
-        UserOpportunities userOpportunities = UserOpportunities.getInstance();
-        userOpportunities.setCatalogPanel((CatalogPanel) panel);
-        userOpportunities.updateCatalogTable();
+        JPanel panel = new CatalogPanel(this.getWidth(), this.getHeight());
 
         AdminOpportunities.getInstance().setFrame(this);
 
-        ImageIcon icon = new ImageIcon("bookIcon.png");
+        ImageIcon icon = new ImageIcon(BusinessLogic.Buildier.getImage("Images/bookIcon.png"));
         setIconImage(icon.getImage());
+
 
         setLayout(new GridBagLayout());
 

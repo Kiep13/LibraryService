@@ -98,6 +98,5 @@ public class Book {
     @Override
     public String toString() {
         return this.title + " : " + this.year + "г.";
-
     }
 }

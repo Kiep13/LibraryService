@@ -41,123 +41,70 @@ public class SearchOptions extends JDialog {
         setLayout(null);
         setResizable(false);
 
-        ImageIcon icon = new ImageIcon("bookIcon.png");
+        ImageIcon icon = new ImageIcon(BusinessLogic.Buildier.getImage("Images/bookIcon.png"));
         setIconImage(icon.getImage());
 
-        titleLabel = new JLabel("Title");
-        titleLabel.setSize(50, 20);
-        titleLabel.setLocation(10, 10);
+        JPanel panel = Buildier.createPanel(getWidth(), getHeight());
 
-        add(titleLabel);
+        titleLabel = Buildier.createLabel("Title", 50, 20, 10, 10);
+        panel.add(titleLabel);
 
-        titleTextField = new JTextField();
-        titleTextField.setSize(120, 20);
-        titleTextField.setLocation(60, 10);
+        titleTextField = Buildier.createTextField(120, 20, 60, 10);
+        panel.add(titleTextField);
 
-        add(titleTextField);
+        genresLabel = Buildier.createLabel("Genre", 50, 20, 10, 40);
+        panel.add(genresLabel);
 
-        genresLabel = new JLabel("Genre");
-        genresLabel.setSize(50, 20);
-        genresLabel.setLocation(10, 40);
+        genresTextField = Buildier.createTextField(120, 20, 60, 40);
+        panel.add(genresTextField);
 
-        add(genresLabel);
+        authorLabel = Buildier.createLabel("Author", 50, 20, 200, 10);
+        panel.add(authorLabel);
 
-        genresTextField = new JTextField();
-        genresTextField.setSize(120, 20);
-        genresTextField.setLocation(60, 40);
+        publisherLabel = Buildier.createLabel("Publisher", 70, 20, 200, 40);
+        panel.add(publisherLabel);
 
-        add(genresTextField);
+        authorTextField = Buildier.createTextField(120, 20, 270, 10);
+        panel.add(authorTextField);
 
-        authorLabel = new JLabel("Author");
-        authorLabel.setSize(50, 20);
-        authorLabel.setLocation(200, 10);
+        publisherTextField = Buildier.createTextField(120, 20, 270, 40);
+        panel.add(publisherTextField);
 
-        add(authorLabel);
+        isbnLabel = Buildier.createLabel("ISBN", 40, 20, 155, 70);
+        panel.add(isbnLabel);
 
-        publisherLabel = new JLabel("Publisher");
-        publisherLabel.setSize(70, 20);
-        publisherLabel.setLocation(200, 40);
+        isbnTextField = Buildier.createTextField(120, 20, 200, 70);
+        panel.add(isbnTextField);
 
-        add(publisherLabel);
+        pagesFromLabel = Buildier.createLabel("Pages from", 70, 20, 105, 100);
+        panel.add(pagesFromLabel);
 
-        authorTextField = new JTextField();
-        authorTextField.setSize(120, 20);
-        authorTextField.setLocation(270, 10);
+        pagesFromTextField = Buildier.createTextField(50, 20, 180, 100);
+        panel.add(pagesFromTextField);
 
-        add(authorTextField);
+        pagesToLabel = Buildier.createLabel("to", 20, 20, 245, 100);
+        panel.add(pagesToLabel);
 
-        publisherTextField = new JTextField();
-        publisherTextField.setSize(120, 20);
-        publisherTextField.setLocation(270, 40);
+        pagesToTextField = Buildier.createTextField(50,20, 270, 100);
+        panel.add(pagesToTextField);
 
-        add(publisherTextField);
+        yearFromLabel = Buildier.createLabel("Year from", 70, 20,105, 130 );
+        panel.add(yearFromLabel);
 
-        isbnLabel = new JLabel("ISBN");
-        isbnLabel.setSize(40, 20);
-        isbnLabel.setLocation(155, 70);
+        yearFromTextField = Buildier.createTextField(50, 20,180, 130 );
+        panel.add(yearFromTextField);
 
-        add(isbnLabel);
+        yearToLabel = Buildier.createLabel("to",20, 20, 245, 130);
+        panel.add(yearToLabel);
 
-        isbnTextField = new JTextField();
-        isbnTextField.setSize(120, 20);
-        isbnTextField.setLocation(200, 70);
+        yearToTextField = Buildier.createTextField(50,20, 270, 130);
+        panel.add(yearToTextField);
 
-        add(isbnTextField);
-
-        pagesFromLabel = new JLabel("Pages from");
-        pagesFromLabel.setSize(70, 20);
-        pagesFromLabel.setLocation(105, 100);
-
-        add(pagesFromLabel);
-
-        pagesFromTextField = new JTextField();
-        pagesFromTextField.setSize(50, 20);
-        pagesFromTextField.setLocation(180, 100);
-
-        add(pagesFromTextField);
-
-        pagesToLabel = new JLabel("to");
-        pagesToLabel.setSize(20, 20);
-        pagesToLabel.setLocation(245, 100);
-
-        add(pagesToLabel);
-
-        pagesToTextField = new JTextField();
-        pagesToTextField.setSize(50,20);
-        pagesToTextField.setLocation(270, 100);
-
-        add(pagesToTextField);
-
-        yearFromLabel = new JLabel("Year from");
-        yearFromLabel.setSize(70 , 20);
-        yearFromLabel.setLocation(105, 130);
-
-        add(yearFromLabel);
-
-        yearFromTextField = new JTextField();
-        yearFromTextField.setSize(50, 20);
-        yearFromTextField.setLocation(180, 130);
-
-        add(yearFromTextField);
-
-        yearToLabel = new JLabel("to");
-        yearToLabel.setSize(20, 20);
-        yearToLabel.setLocation(245, 130);
-
-        add(yearToLabel);
-
-        yearToTextField = new JTextField();
-        yearToTextField.setSize(50,20);
-        yearToTextField.setLocation(270, 130);
-
-        add(yearToTextField);
-
-        confirm = new JButton("Confirm");
+        confirm = Buildier.createButton("Confirm",80, 30, 170, 160);
         confirm.addActionListener(e -> onButtonClick());
-        confirm.setSize(80, 30);
-        confirm.setLocation(170, 160);
+        panel.add(confirm);
 
-        add(confirm);
+        add(panel);
 
     }
 
@@ -169,8 +116,7 @@ public class SearchOptions extends JDialog {
             if(yearFromTextField.getText().length() != 0)Integer.parseInt(yearFromTextField.getText());
             if(yearToTextField.getText().length() != 0 )Integer.parseInt(yearToTextField.getText());
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Buildier.ShowErrorMessage("Ошибка", "Невозможно иденцифитровать числовые параметры");
+            Buildier.showErrorMessage("Error", "Numeric parameters cannot be identified");
             return;
         }
 
@@ -203,7 +149,7 @@ public class SearchOptions extends JDialog {
         if(yearToTextField.getText().length() == 0) opportunities.yearMax = opportunities.dbHelper.getMaxYear();
         else opportunities.yearMax = Integer.parseInt(yearToTextField.getText());
 
-        opportunities.updateCatalogTable();
+        opportunities.viewListOfBooks();
         dispose();
     }
 

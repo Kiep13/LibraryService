@@ -1,8 +1,7 @@
 package Interface;
 
-import BusinessLogic.AdminOpportunities;
 import BusinessLogic.Buildier;
-import BusinessLogic.DataBaseHelper;
+import BusinessLogic.AdminOpportunities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,16 +11,17 @@ import java.awt.event.KeyEvent;
 public class Authorization extends JDialog {
 
 
-    public JLabel loginLabel;
-    public JTextField loginTextField;
-    public JLabel passwordLabel;
-    public JPasswordField passwordTextField;
-    public JButton logIn;
+    JLabel loginLabel;
+    JTextField loginTextField;
+    JLabel passwordLabel;
+    JPasswordField passwordTextField;
+    JButton logIn;
+    JButton registration;
 
     public Authorization() {
 
         setTitle("Authorization");
-        setSize(250, 220);
+        setSize(250, 260);
         setVisible(true);
         setBackground(Color.WHITE);
 
@@ -31,48 +31,29 @@ public class Authorization extends JDialog {
         setLayout(null);
         setResizable(false);
 
-        ImageIcon icon = new ImageIcon("bookIcon.png");
+        ImageIcon icon = new ImageIcon(BusinessLogic.Buildier.getImage("Images/bookIcon.png"));
         setIconImage(icon.getImage());
 
-        JPanel panel = new JPanel();
-        panel.setVisible(true);
-        panel.setBackground(Color.WHITE);
-        panel.setLocation(0, 0);
-        panel.setSize(getWidth(), getHeight());
-        panel.setLayout(null);
+        JPanel panel = Buildier.createPanel(getWidth(), getHeight());
 
-        loginLabel = new JLabel("Login");
-        loginLabel.setSize(40, 20);
-        loginLabel.setLocation(105,20);
-
+        loginLabel = Buildier.createLabel("Login", 40, 20, 105, 20);
         panel.add(loginLabel);
 
-        loginTextField = new JTextField();
-        loginTextField.setSize(200, 20);
-        loginTextField.setLocation(20, 45);
-
+        loginTextField = Buildier.createTextField(200, 20, 20, 45);
         panel.add(loginTextField);
 
-        passwordLabel = new JLabel("Password");
-        passwordLabel.setSize(70, 20);
-        passwordLabel.setLocation(90, 75);
+        passwordLabel = Buildier.createLabel("Password" ,70, 20, 90, 75);
+        panel.add(passwordLabel);
 
-        getContentPane().add(passwordLabel);
-
-        passwordTextField = new JPasswordField();
-        passwordTextField.setSize(200, 20);
-        passwordTextField.setLocation(20, 100);
-
+        passwordTextField = Buildier.createPasswordField(200, 20, 20, 100);
         panel.add(passwordTextField);
 
-        logIn = new JButton("Entry");
-        logIn.setSize(80, 30);
-        logIn.setLocation(85, 130);
+        logIn = Buildier.createButton("Entry", 80, 30, 85, 130);
 
         Action logInAction = new AbstractAction("Log in") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                onButtonClick();
+                onLogInButtonClick();
             }
         };
         logIn.setAction(logInAction);
@@ -82,31 +63,46 @@ public class Authorization extends JDialog {
 
         panel.add(logIn);
 
+        registration = Buildier.createBlueLinkButton("Registration");
+        registration.setSize(120, 30);
+        registration.setLocation(65, 170);
+        registration.addActionListener(e -> onRegistrationButtonClick());
+
+        panel.add(registration);
+
         getContentPane().add(panel);
 
     }
 
-    public void onButtonClick() {
+    public void onLogInButtonClick() {
 
         String login = loginTextField.getText();
         String password = passwordTextField.getText();
 
-        if(login.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Пустое поле логина");
-            return;
-        }
-
-        if(password.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Пустое поле пароля");
-            return;
-        }
 
         AdminOpportunities adminOpp = AdminOpportunities.getInstance();
-        if(adminOpp.login(login, password)) {
+        if(adminOpp.authorize(login, password)) {
             dispose();
+            int width = adminOpp.window.getWidth();
+            int height = adminOpp.window.getHeight();
+
+            adminOpp.window.getContentPane().removeAll();
+            JPanel panel = new AdminPanel(width, height);
+
+            GridBagConstraints gbc = Buildier.crateGbc();
+
+            adminOpp.window.getContentPane().add(panel, gbc);
+            adminOpp.window.revalidate();
+            adminOpp.window.repaint();
+            adminOpp.window.setTitle("Admin Service");
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Неправильно указан логин и/или пароль");
+            Buildier.showErrorMessage("Error", "Invalid username and / or password");
         }
 
+    }
+
+    public void onRegistrationButtonClick() {
+        new Registration(getX(), getY());
+        this.dispose();
     }
 }

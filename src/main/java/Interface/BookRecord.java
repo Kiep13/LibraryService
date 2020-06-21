@@ -1,6 +1,7 @@
 package Interface;
 
 import BusinessLogic.AdminOpportunities;
+import BusinessLogic.Buildier;
 import BusinessLogic.DataBaseHelper;
 
 import javax.swing.*;
@@ -33,14 +34,14 @@ public class BookRecord extends JFrame {
 
     public BookRecord()  {
 
-        execute();
+        initialize();
         id_book = "";
 
     }
 
     public BookRecord(String isbn)  {
 
-        execute();
+        initialize();
         this.id_book = isbn;
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
@@ -72,12 +73,12 @@ public class BookRecord extends JFrame {
             isbnTextField.setEditable(false);
 
         } catch(SQLException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting record data");
         }
 
     }
 
-    public void execute() {
+    public void initialize() {
 
         setTitle("Book record");
         setSize(310, 300);
@@ -90,32 +91,18 @@ public class BookRecord extends JFrame {
         setLayout(null);
         setResizable(false);
 
-        ImageIcon icon = new ImageIcon("bookIcon.png");
+        ImageIcon icon = new ImageIcon(BusinessLogic.Buildier.getImage("Images/bookIcon.png"));
         setIconImage(icon.getImage());
 
-        JPanel panel = new JPanel();
-        panel.setVisible(true);
-        panel.setBackground(Color.WHITE);
-        panel.setLocation(0, 0);
-        panel.setSize(getWidth(), getHeight());
-        panel.setLayout(null);
+        JPanel panel = Buildier.createPanel(getWidth(), getHeight());
 
-        titleLabel = new JLabel("Title");
-        titleLabel.setSize(70, 20);
-        titleLabel.setLocation(10, 10);
-
+        titleLabel = Buildier.createLabel("Title", 70, 20, 10, 10);
         panel.add(titleLabel);
 
-        titleTextField = new JTextField();
-        titleTextField.setSize(200, 20);
-        titleTextField.setLocation(80, 10);
-
+        titleTextField = Buildier.createTextField(200, 20, 80, 10);
         panel.add(titleTextField);
 
-        authorLabel = new JLabel("Author");
-        authorLabel.setSize(70, 20);
-        authorLabel.setLocation(10, 40);
-
+        authorLabel = Buildier.createLabel("Author", 70, 20, 10 ,40);
         panel.add(authorLabel);
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
@@ -129,10 +116,7 @@ public class BookRecord extends JFrame {
 
         panel.add(authorList);
 
-        publisherLabel = new JLabel("Publisher");
-        publisherLabel.setSize(70, 20);
-        publisherLabel.setLocation(10, 70);
-
+        publisherLabel = Buildier.createLabel("Publisher", 70, 20, 10, 70);
         panel.add(publisherLabel);
 
         ArrayList<String> publishers = dbHelper.getPublishers();
@@ -146,10 +130,7 @@ public class BookRecord extends JFrame {
 
         panel.add(publisherList);
 
-        genresLabel = new JLabel("Genre");
-        genresLabel.setSize(70, 20);
-        genresLabel.setLocation(10, 100);
-
+        genresLabel = Buildier.createLabel("Genre", 70, 20, 10, 100);
         panel.add(genresLabel);
 
         ArrayList<String> genres = dbHelper.getGenres();
@@ -157,19 +138,13 @@ public class BookRecord extends JFrame {
 
         genresList = new JComboBox<Object>(arrayGenres);
         genresList.setMaximumRowCount(arrayGenres.length);
-
         genresList.setSize(200, 20);
         genresList.setLocation(80, 100);
-
         genresList.setEditable(true);
-
         panel.add(genresList);
 
 
-        isbnLabel = new JLabel("ISBN");
-        isbnLabel.setSize(70, 20);
-        isbnLabel.setLocation(10, 130);
-
+        isbnLabel = Buildier.createLabel("ISBN", 70, 20, 10, 130);
         panel.add(isbnLabel);
 
         MaskFormatter isbnFormatter;
@@ -177,7 +152,7 @@ public class BookRecord extends JFrame {
             isbnFormatter = new MaskFormatter("UUU##UUU##");
             isbnTextField = new JFormattedTextField(isbnFormatter);
         } catch(ParseException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when creating a code mask");
         }
         isbnTextField.setToolTipText("(Три заглавных символа + две цифры) * 2");
         isbnTextField.setSize(200, 20);
@@ -185,35 +160,20 @@ public class BookRecord extends JFrame {
 
         panel.add(isbnTextField);
 
-        pagesLabel = new JLabel("Pages");
-        pagesLabel.setSize(70, 20);
-        pagesLabel.setLocation(10, 160);
-
+        pagesLabel = Buildier.createLabel("Pages", 70, 20, 10, 160);
         panel.add(pagesLabel);
 
-        pagesTextField = new JTextField();
-        pagesTextField.setSize(200, 20);
-        pagesTextField.setLocation(80, 160);
-
+        pagesTextField = Buildier.createTextField(200, 20, 80, 160);
         panel.add(pagesTextField);
 
-        yearLabel = new JLabel("Year");
-        yearLabel.setSize(70, 20);
-        yearLabel.setLocation(10, 190);
-
+        yearLabel = Buildier.createLabel("Year", 70, 20, 10, 190);
         panel.add(yearLabel);
 
-        yearTextField = new JTextField();
-        yearTextField.setSize(200, 20);
-        yearTextField.setLocation(80, 190);
-
+        yearTextField = Buildier.createTextField(200, 20, 80, 190);
         panel.add(yearTextField);
 
-        save = new JButton("Save");
+        save = Buildier.createButton("Save", 80, 30, 115,220);
         save.addActionListener(e -> onButtonClick());
-        save.setSize(80, 30);
-        save.setLocation(115,220);
-
         panel.add(save);
 
         add(panel);
@@ -231,17 +191,88 @@ public class BookRecord extends JFrame {
         String pages = pagesTextField.getText();
         String year = yearTextField.getText();
 
+        if (isbn.length() != 10) {
+            Buildier.showErrorMessage("Error", "Errors when entering the book code");
+            return;
+        }
+
+        if (title.length() == 0) {
+            Buildier.showErrorMessage("Error", "The book title is missing");
+            return;
+        } else {
+            title = title.substring(0, 1).toUpperCase() + title.substring(1);
+        }
+
+        if (author.length() == 0) {
+            Buildier.showErrorMessage("Error", "The author field is empty");
+            return;
+        }
+
+        if (genre.length() == 0) {
+            Buildier.showErrorMessage("Error", "The genre field is empty");
+            return;
+        } else {
+            genre = genre.substring(0, 1).toUpperCase() + genre.substring(1).toLowerCase();
+        }
+
+        if (publisher.length() == 0) {
+            Buildier.showErrorMessage("Error", "The publisher field is empty");
+            return;
+        } else {
+            publisher = publisher.substring(0, 1).toUpperCase() + publisher.substring(1);
+        }
+
+        if (pages.length() == 0) {
+            Buildier.showErrorMessage("Error", "The number of pages is not specified");
+            return;
+        }
+
+        int amount_pages, year_value;
+
+        try {
+            amount_pages = Integer.parseInt(pages);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "It is not possible to identify the number of pages");
+            return;
+        }
+
+        if (amount_pages <= 0) {
+            Buildier.showErrorMessage("Error", "Invalid set number of pages");
+            return;
+        }
+
+        try {
+            year_value = Integer.parseInt(year);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "It is not possible to identify the year");
+            return;
+        }
+
+        if (year_value <= 1500 || year_value > getCurrentYear()) {
+            Buildier.showErrorMessage("Error", "Invalid specified year");
+            return;
+        }
+
         AdminOpportunities opportunities = AdminOpportunities.getInstance();
 
         if(id_book.compareTo("") == 0) {
-            if(opportunities.addBook(isbn, title, author, genre, publisher, pages, year)) {
+            if(opportunities.addBook(isbn, title, author, genre, publisher, amount_pages, year_value)) {
                 dispose();
             }
         } else {
-            if(opportunities.redactBook(isbn, title, author, genre, publisher, pages, year)) {
+            if(opportunities.redactBook(isbn, title, author, genre, publisher, amount_pages, year_value)) {
                 dispose();
             }
         }
 
     }
+
+    public int getCurrentYear() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance(java.util.TimeZone.getDefault(), java.util.Locale.getDefault());
+        calendar.setTime(new java.util.Date());
+        return calendar.get(java.util.Calendar.YEAR);
+    }
+
 }

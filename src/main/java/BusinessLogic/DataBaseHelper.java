@@ -11,7 +11,7 @@ public class DataBaseHelper {
 
     private DataBaseHelper() {
 
-        String url = "jdbc:mysql://localhost/libraryservice?serverTimezone=Europe/Moscow&useSSL=false";
+        String url = "jdbc:mysql://localhost/libraryservice?serverTimezone=Europe/Moscow&allowPublicKeyRetrieval=true&useSSL=false";
         String username = "root";
         String password = "1234";
 
@@ -37,13 +37,43 @@ public class DataBaseHelper {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public boolean existsLibrary(String name, String address, String phone) {
-        String request = "SELECT id_library FROM libraries WHERE LOWER(name) = LOWER(?) OR LOWER(address) = LOWER(?) OR LOWER(telephone) = LOWER(?)";
+    public ResultSet existsUser(String login) {
+        String request = "SELECT * FROM admins WHERE login = ?";
+        ResultSet result = null;
+        try {
+            statement = connection.prepareStatement(request);
+            statement.setString(1, login);
+            result = statement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public boolean addAdmin(String login, String password) {
+        String request = "INSERT admins (login, password) VALUES (?, ?)";
+        try {
+            statement = connection.prepareStatement(request);
+            statement.setString(1, login);
+            statement.setString(2, password);
+            int result = statement.executeUpdate();
+            return result != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean existsLibrary(String name, String address, String phone, long id_library) {
+        String request = "SELECT id_library FROM libraries WHERE (LOWER(name) = LOWER(?) OR LOWER(address) = LOWER(?) OR LOWER(telephone) = LOWER(?)) AND id_library != ? ";
         try {
             statement = connection.prepareStatement(request);
             statement.setString(1, name);
             statement.setString(2, address);
             statement.setString(3, phone);
+            statement.setLong(4, id_library);
             ResultSet result = statement.executeQuery();
             if(result.next()) {
                 return true;
@@ -71,12 +101,13 @@ public class DataBaseHelper {
         return false;
     }
 
-    public boolean existsBookFund(String id_book, long id_library) {
-        String request = "SELECT * FROM bookfund WHERE id_book = ? AND id_library = ?";
+    public boolean existsBookFund(String id_book, long id_library, long id_bookfund) {
+        String request = "SELECT * FROM bookfund WHERE id_book = ? AND id_library = ? AND id_bookfund != ? ";
         try {
             statement = connection.prepareStatement(request);
             statement.setString(1, id_book);
             statement.setLong(2, id_library);
+            statement.setLong(3, id_bookfund);
             ResultSet result = statement.executeQuery();
             if(result.next()) {
                 return true;
@@ -181,32 +212,6 @@ public class DataBaseHelper {
         return result;
     }
 
-    public ResultSet findBookById(String isbn) {
-        String request = "SELECT CONCAT(title, ' : ', year, 'г.') FROM books WHERE ISBN = ?";
-        ResultSet result = null;
-        try {
-            statement = connection.prepareStatement(request);
-            statement.setString(1,isbn);
-            result = statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public ResultSet findLibraryById(long id_library) {
-        String request = "SELECT name FROM libraries WHERE id_library = ?";
-        ResultSet result = null;
-        try {
-            statement = connection.prepareStatement(request);
-            statement.setLong(1,id_library);
-            result = statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean addLibrary(String name, String address, String telephone) {
@@ -277,7 +282,7 @@ public class DataBaseHelper {
         return true;
     }
 
-    public boolean addBook(String isbn, String title, long id_author, long id_genre, long id_publisher, Integer pages, Integer year) {
+    public boolean addBook(String isbn, String title, long id_author, long id_genre, long id_publisher, int pages, int year) {
         String request = "INSERT books (ISBN, title, id_author, id_genre, id_publisher, amount_pages, year) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             statement = connection.prepareStatement(request);
@@ -340,7 +345,7 @@ public class DataBaseHelper {
         return true;
     }
 
-    public boolean redactBook(String isbn, String title, long id_author, long id_genre, long id_publisher, Integer amount_pages, Integer year) {
+    public boolean redactBook(String isbn, String title, long id_author, long id_genre, long id_publisher, int amount_pages,int year) {
         String request = "UPDATE books SET title = ?, id_author = ?,  id_genre = ?, id_publisher = ?,  amount_pages = ?, year = ? WHERE ISBN = ?";
         try {
             statement = connection.prepareStatement(request);
@@ -370,8 +375,8 @@ public class DataBaseHelper {
             statement.setString(1, id_book);
             statement.setLong(2, id_library);
             statement.setInt(3, amount);
-            statement.setLong(4, id_bookfund);
-            statement.setString(5, login);
+            statement.setString(4, login);
+            statement.setLong(5, id_bookfund);
             int result = statement.executeUpdate();
             if(result == 0) {
                 return false;
@@ -382,9 +387,6 @@ public class DataBaseHelper {
         }
         return true;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -439,7 +441,7 @@ public class DataBaseHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ResultSet getLibraries(String sortLabel) {
-        String request = "SELECT * FROM libraries ORDER BY " + sortLabel;
+        String request = "SELECT id_library AS ID, name AS Library, address AS Address,  telephone AS Telephone FROM libraries ORDER BY " + sortLabel;
         ResultSet result = null;
         try {
             statement = connection.prepareStatement(request);
@@ -451,7 +453,8 @@ public class DataBaseHelper {
     }
 
     public ResultSet getBooks(String sortLabel) {
-        String request = "SELECT ISBN, b.title, CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS author, g.genre, p.publisher, b.amount_pages, b.year " +
+        String request = "SELECT b.ISBN AS ISBN, b.title AS Title, CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS Author, " +
+                                "g.genre AS Genre, p.publisher AS Publisher, b.amount_pages AS Pages, b.year AS Year " +
                          "FROM books AS b " +
                          "LEFT OUTER JOIN authors AS a ON b.id_author = a.id_author " +
                          "LEFT OUTER JOIN genres AS g ON b.id_genre = g.id_genre " +
@@ -467,7 +470,8 @@ public class DataBaseHelper {
     }
 
     public ResultSet getBookFund(String sortLabel) {
-        String request = "SELECT CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS author, b.title, p.publisher, b.year, b.amount_pages, g.genre, b.ISBN, l.name, l.address, l.telephone " +
+        String request = "SELECT bf.id_bookfund AS \"ID\", CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS Author, b.title AS Title, p.publisher AS Publisher, " +
+                            "b.year AS Year, b.amount_pages AS Pages, g.genre AS Genre, b.ISBN AS ISBN, l.name AS Library, l.address AS Address, l.telephone AS Telephone, bf.amount AS Amount " +
                 "FROM  bookfund AS bf " +
                 "INNER JOIN books AS b ON b.ISBN = bf.id_book " +
                 "INNER JOIN libraries AS l ON l.id_library = bf.id_library " +
@@ -484,14 +488,12 @@ public class DataBaseHelper {
         return result;
     }
 
-    //Для авторов, жанров и издателей можно использовать Left Outer Join. Это аозволит иметь пустые записи в след.полях
-    //Но тогда, получится что при поиске будут выдаваться все значения с акцетом на совпадения по LIKE
-    //Поэтому 18.03.20 поставила все соединения INNER JOIN
-    //Есть смысл еще хадуматься о своих действиях
     public ResultSet getCatalog(String sortLabel, String id_library, String titleMask, String genreMask,
                                 String authorMask, String publisherMask, String isbnMask, int pageMin,
                                 int pageMax, int yearMin, int yearMax) {
-        String request = "SELECT CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS author, b.title, p.publisher, b.year, b.amount_pages, g.genre, b.ISBN, l.name, l.address, l.telephone " +
+        String request = "SELECT CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS Author, b.title AS Title, " +
+                            "p.publisher AS Publisher, b.year AS Year, b.amount_pages AS Pages, g.genre As Genre, " +
+                            "b.ISBN AS ISBN, l.name AS Library, l.address AS Address, l.telephone AS Telephone, bf.amount AS Amount " +
                 "FROM  bookfund AS bf " +
                 "INNER JOIN books AS b ON b.ISBN = bf.id_book AND LOWER(b.title) LIKE LOWER(?) AND b.ISBN LIKE ? AND b.amount_pages BETWEEN ? AND ? AND b.year BETWEEN ? AND ? " +
                 "INNER JOIN libraries AS l ON l.id_library = bf.id_library AND bf.id_library LIKE ? " +
@@ -511,48 +513,6 @@ public class DataBaseHelper {
             statement.setString(8, authorMask);
             statement.setString(9, genreMask);
             statement.setString(10, publisherMask);
-            result = statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public ResultSet getShortInfoBooks() {
-        String request = "SELECT ISBN, title, year FROM books";
-        ResultSet result = null;
-        try {
-            statement = connection.prepareStatement(request);
-            result = statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public ResultSet getShortInfoLibraries() {
-        String request = "SELECT id_library, name, address FROM libraries";
-        ResultSet result = null;
-        try {
-            statement = connection.prepareStatement(request);
-            result = statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public ResultSet getShortInfoBookFund(String sortLabel) {
-        String request = "SELECT bf.id_bookfund, bf.id_book, bf.id_library, CONCAT(a.surname, ' ', a.name, ' ', a.patronymic) AS author " +
-                "FROM  bookfund AS bf " +
-                "INNER JOIN books AS b ON b.ISBN = bf.id_book " +
-                "INNER JOIN libraries AS l ON l.id_library = bf.id_library " +
-                "LEFT OUTER JOIN authors AS a ON b.id_author = a.id_author " +
-                "LEFT OUTER JOIN genres AS g ON b.id_genre = g.id_genre " +
-                "LEFT OUTER JOIN publishers AS p ON b.id_publisher = p.id_publisher ORDER BY " + sortLabel;
-        ResultSet result = null;
-        try {
-            statement = connection.prepareStatement(request);
             result = statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -590,7 +550,7 @@ public class DataBaseHelper {
         return result;
     }
 
-    public ResultSet getAuthorId(String surname,String name,String patronymic) {
+    public ResultSet getAuthorId(String surname, String name, String patronymic) {
 
         String request = "SELECT id_author FROM authors WHERE LOWER(surname) = LOWER(?) AND LOWER(name) = LOWER(?) AND LOWER(patronymic) = LOWER(?)";
         ResultSet result = null;
@@ -608,7 +568,7 @@ public class DataBaseHelper {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public boolean deleteLibrary(Long id_library) {
+    public boolean deleteLibrary(long id_library) {
 
         String request = "DELETE FROM libraries WHERE id_library = ?";
         try {

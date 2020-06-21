@@ -26,11 +26,15 @@ public class BookFund {
 
     }
 
-    public long getId_bookfund() {
+    public BookFund(long id_bookfund) {
+        this.id_bookfund = id_bookfund;
+    }
+
+    public long getId() {
         return id_bookfund;
     }
 
-    public void setId_bookfund(long id_bookfund) {
+    public void setId(long id_bookfund) {
         this.id_bookfund = id_bookfund;
     }
 

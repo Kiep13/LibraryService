@@ -4,9 +4,8 @@ import Data.Admin;
 import Data.Book;
 import Data.BookFund;
 import Data.Library;
-import Interface.*;
 
-import java.awt.*;
+import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,11 +16,23 @@ public class AdminOpportunities {
 
     Admin admin;
     public DataBaseHelper dbHelper;
-    LibraryService window;
+    public JFrame window;
 
-    LibraryPanel libraryPanel;
-    BookPanel bookPanel;
-    BookFundPanel bfPanel;
+    public JTable libraryTable;
+    public JComboBox<Object> libraryFieldList;
+    public ArrayList<Library> libraryArrayList;
+
+    public JTable bookTable;
+    public JComboBox<Object> bookFieldList;
+    public ArrayList<Book> bookArrayList;
+
+    public JTable bfTable;
+    public JComboBox<Object> bfFieldList;
+    public ArrayList<BookFund> bfArrayList;
+
+    public String[] libraryHeaders = new String [] {"ID", "Library", "Address", "Telephone"};
+    public String[] bookHeaders = new String [] {"ISBN", "Title", "Author", "Genre", "Publisher", "Pages", "Year"};
+    public String[] bookFundHeaders = new String [] {"ID", "Author", "Title", "Publisher", "Year", "Pages", "Genre", "ISBN", "Library", "Address", "Telephone", "Amount"};
 
     private AdminOpportunities() {
 
@@ -30,7 +41,7 @@ public class AdminOpportunities {
     }
 
     public static AdminOpportunities getInstance() {
-        if(opportunities == null) {
+        if (opportunities == null) {
             opportunities = new AdminOpportunities();
         }
         return opportunities;
@@ -38,61 +49,72 @@ public class AdminOpportunities {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void setLibraryPanel(LibraryPanel libraryPanel) {
-        this.libraryPanel = libraryPanel;
-    }
-
-    public void setBookPanel(BookPanel bookPanel) {
-        this.bookPanel = bookPanel;
-    }
-
-    public void setBfPanel(BookFundPanel bfPanel) {
-        this.bfPanel = bfPanel;
-    }
-
     public void setAdmin(String login) {
         this.admin = new Admin(login);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void setFrame(LibraryService window) {
+    public void setFrame(JFrame window) {
         this.window = window;
     }
 
-    public boolean login(String login, String password) {
-        ResultSet result = dbHelper.findUser(login, password);
-        boolean isFind = false;
-        try{
-          isFind =  result.next();
-          setAdmin(result.getString(1));
-        } catch(SQLException e) {
-            e.printStackTrace();
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean register(String login, String password, String repeatPassword) {
+
+        if(login.length() == 0) {
+            Buildier.showErrorMessage("Error", "Login field can not be empty!");
+            return false;
         }
-        if(isFind) {
 
+        if(password.length() == 0) {
+            Buildier.showErrorMessage("Error", "Password field can not be empty!");
+            return false;
+        }
 
-            int width = window.getWidth();
-            int height = window.getHeight();
+        if(password.length() < 3) {
+            Buildier.showErrorMessage("Error", "Login value is to short!");
+            return false;
+        }
 
-            window.remove(window.panel);
-            window.panel = new AdminPanel(width, height);
+        if(password.length() < 4) {
+            Buildier.showErrorMessage("Error", "Password value is too short!");
+            return false;
+        }
 
-            GridBagConstraints gbc = new GridBagConstraints();
+        if(password.compareTo(repeatPassword) != 0) {
+            Buildier.showErrorMessage("Error", "Passwords don't match!");
+            return false;
+        }
 
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.anchor = GridBagConstraints.CENTER;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
+        try {
+            ResultSet resultOfExists = dbHelper.existsUser(login);
+            if(!resultOfExists.next()) {
+                dbHelper.addAdmin(login, password);
+            }
+        } catch (SQLException e) {
+            Buildier.showErrorMessage("Error", "A user with this name already exists!");
+            return false;
+        }
+        return true;
+    }
 
-            window.getContentPane().add(window.panel, gbc);
-            window.revalidate();
-            window.repaint();
-            window.setTitle("Admin Service");
+    public boolean authorize(String login, String password) {
 
-        } else {
+        if(login.length() == 0) {
+            Buildier.showErrorMessage("Error", "Login field is empty");
+            return false;
+        }
+
+        if(password.length() == 0) {
+            Buildier.showErrorMessage("Error", "Password field is empty");
+            return false;
+        }
+
+        ResultSet result = dbHelper.findUser(login, password);
+        try {
+            result.next();
+            setAdmin(result.getString(1));
+        } catch (SQLException e) {
             return false;
         }
         return true;
@@ -100,111 +122,33 @@ public class AdminOpportunities {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void updateBookTable() {
+    public void updateBooks() {
 
-        String sortLabel = String.valueOf(bookPanel.fieldsList.getSelectedItem());
-        sortLabel = findBookColumnName(sortLabel);
+        String sortLabel = String.valueOf(bookFieldList.getSelectedItem());
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
         DatabaseTableModel model = new DatabaseTableModel();
-        bookPanel.bookArrayList = new ArrayList<>();
+        bookArrayList = new ArrayList<>();
         try {
             ResultSet books = dbHelper.getBooks(sortLabel);
-            model.setDataSource(books, bookPanel.columnsHeader);
-            bookPanel.table.setModel(model);
+            model.setDataSource(books, bookHeaders);
+            bookTable.setModel(model);
 
             books = dbHelper.getBooks(sortLabel);
-            bookPanel.bookArrayList.clear();
+            bookArrayList.clear();
             while (books.next()) {
-                bookPanel.bookArrayList.add(new Book(books.getString(1), books.getString(2), books.getInt(7)));
+                bookArrayList.add(new Book(books.getString(1), books.getString(2), books.getInt(7)));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when updating the table");
         }
 
     }
 
-    public String findBookColumnName(String columnName) {
-        switch (columnName) {
-            case "ISBN": return "ISBN";
-            case "Название": return "b.title";
-            case "Автор": return "author";
-            case "Жанр": return "g.genre";
-            case "Издатель": return "p.publisher";
-            case "Количество страниц": return "b.amount_pages";
-            case "Год": return "b.year";
-        }
-        return "";
-    }
+    public boolean addBook(String isbn, String title, String author, String genre, String publisher, int pages, int year) {
 
-    public boolean addBook(String isbn, String title, String author,String genre, String publisher, String pages, String year) {
-
-        if(isbn.length() != 10) {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибки при вводе кода книги");
-            return false;
-        }
-
-        if(dbHelper.existsBook(isbn)) {
-            Buildier.ShowErrorMessage("Ошибка", "Книга с подобным кодом уже существует");
-            return false;
-        }
-
-        if(title.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Название книги отсутствует");
-            return false;
-        } else {
-            title = title.substring(0,1).toUpperCase() + title.substring(1);
-        }
-
-        if(author.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Поле автора пустое");
-            return false;
-        }
-
-        if(genre.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Поле жанра пустое");
-            return false;
-        } else {
-            genre = genre.substring(0, 1).toUpperCase() + genre.substring(1).toLowerCase();
-        }
-
-        if(publisher.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Поле издателя пустое");
-            return false;
-        } else {
-            publisher = publisher.substring(0, 1).toUpperCase() + publisher.substring(1);
-        }
-
-        if(pages.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Не указано количество страниц");
-            return false;
-        }
-
-        int amount_pages, year_value;
-
-        try{
-            amount_pages = Integer.parseInt(pages);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Buildier.ShowErrorMessage("Ошибка", "Невозможно иденцифитровать количество страниц");
-            return false;
-        }
-
-        if (amount_pages <= 0 ) {
-            Buildier.ShowErrorMessage("Ошибка", "Неверное заданное количество страниц");
-            return false;
-        }
-
-        try{
-            year_value = Integer.parseInt(year);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Buildier.ShowErrorMessage("Ошибка", "Невозможно иденцифитровать год");
-            return false;
-        }
-
-        if (year_value <= 1500 || year_value > getCurrentYear()) {
-            Buildier.ShowErrorMessage("Ошибка", "Неверное заданный год");
+        if (dbHelper.existsBook(isbn)) {
+            Buildier.showErrorMessage("Error", "A book with this ISBN already exists");
             return false;
         }
 
@@ -212,135 +156,71 @@ public class AdminOpportunities {
         long id_publisher = getPublisherId(publisher);
         long id_genre = getGenreId(genre);
 
-        if(dbHelper.addBook(isbn, title, id_author, id_genre, id_publisher, amount_pages, year_value)) {
-            updateBookTable();
+        if (dbHelper.addBook(isbn, title, id_author, id_genre, id_publisher, pages, year)) {
+            updateBooks();
             return true;
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении книги");
+            Buildier.showErrorMessage("Error", "Error when adding a book");
             return false;
         }
     }
 
-    public boolean redactBook(String isbn, String title, String author,String genre, String publisher, String pages, String year) {
-
-        if(isbn.length() != 10) {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибки при вводе кода книги");
-            return false;
-        }
-
-        if(title.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Название книги отсутствует");
-            return false;
-        } else {
-            title = title.substring(0,1).toUpperCase() + title.substring(1);
-        }
-
-        if(author.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Поле автора пустое");
-            return false;
-        }
-
-        if(genre.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Поле жанра пустое");
-            return false;
-        } else {
-            genre = genre.substring(0, 1).toUpperCase() + genre.substring(1).toLowerCase();
-        }
-
-        if(publisher.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Поле издателя пустое");
-            return false;
-        } else {
-            publisher = publisher.substring(0, 1).toUpperCase() + publisher.substring(1);
-        }
-
-        if(pages.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Не указано количество страниц");
-            return false;
-        }
-
-        int amount_pages, year_value;
-
-        try{
-            amount_pages = Integer.parseInt(pages);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Buildier.ShowErrorMessage("Ошибка", "Невозможно иденцифитровать количество страниц");
-            return false;
-        }
-
-        if (amount_pages <= 0 ) {
-            Buildier.ShowErrorMessage("Ошибка", "Неверное заданное количество страниц");
-            return false;
-        }
-
-        try{
-            year_value = Integer.parseInt(year);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Buildier.ShowErrorMessage("Ошибка", "Невозможно иденцифитровать год");
-            return false;
-        }
-
-        if (year_value <= 1500 || year_value > getCurrentYear()) {
-            Buildier.ShowErrorMessage("Ошибка", "Неверное заданный год");
-            return false;
-        }
+    public boolean redactBook(String isbn, String title, String author, String genre, String publisher, int pages, int year) {
 
         long id_author = getAuthorId(author);
         long id_publisher = getPublisherId(publisher);
         long id_genre = getGenreId(genre);
 
-        if(dbHelper.redactBook(isbn, title, id_author, id_genre, id_publisher, amount_pages, year_value)) {
-            updateBookTable();
+        if (dbHelper.redactBook(isbn, title, id_author, id_genre, id_publisher, pages, year)) {
+            updateBooks();
             return true;
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при редактировании книги");
+            Buildier.showErrorMessage("Error", "Error when editing a book");
             return false;
         }
     }
 
     public void deleteBook(String id_book) {
-        if(dbHelper.deleteBook(id_book)) {
-            updateBookTable();
+        if (dbHelper.deleteBook(id_book)) {
+            updateBooks();
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при удалении книги");
+            Buildier.showErrorMessage("Error", "Error deleting a book");
         }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public long getAuthorId(String author){
+    public long getAuthorId(String author) {
 
         long id_author = -1;
 
-        String [] arrayAuthor = author.split(" ");
-        if(arrayAuthor.length == 3) {
-            arrayAuthor[0] = arrayAuthor[0].substring(0,1).toUpperCase() + arrayAuthor[0].substring(1).toLowerCase();
-            arrayAuthor[1] = arrayAuthor[1].substring(0,1).toUpperCase() + arrayAuthor[1].substring(1).toLowerCase();
-            arrayAuthor[2] = arrayAuthor[2].substring(0,1).toUpperCase() + arrayAuthor[2].substring(1).toLowerCase();
-        } else if( arrayAuthor.length == 2) {
-            String surname = arrayAuthor[0].substring(0,1).toUpperCase() + arrayAuthor[0].substring(1).toLowerCase();
-            String name = arrayAuthor[1].substring(0,1).toUpperCase() + arrayAuthor[1].substring(1).toLowerCase();
-            arrayAuthor = new String[] {surname, name, ""};
+        String[] arrayAuthor = author.split(" ");
+        if (arrayAuthor.length == 3) {
+            arrayAuthor[0] = arrayAuthor[0].substring(0, 1).toUpperCase() + arrayAuthor[0].substring(1).toLowerCase();
+            arrayAuthor[1] = arrayAuthor[1].substring(0, 1).toUpperCase() + arrayAuthor[1].substring(1).toLowerCase();
+            arrayAuthor[2] = arrayAuthor[2].substring(0, 1).toUpperCase() + arrayAuthor[2].substring(1).toLowerCase();
+        } else if (arrayAuthor.length == 2) {
+            String surname = arrayAuthor[0].substring(0, 1).toUpperCase() + arrayAuthor[0].substring(1).toLowerCase();
+            String name = arrayAuthor[1].substring(0, 1).toUpperCase() + arrayAuthor[1].substring(1).toLowerCase();
+            arrayAuthor = new String[]{surname, name, ""};
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Слишком мало данных об авторе");
+            Buildier.showErrorMessage("Error", "Too little information about the author");
             return id_author;
         }
 
         ResultSet resultSet = dbHelper.getAuthorId(arrayAuthor[0], arrayAuthor[1], arrayAuthor[2]);
         try {
-            if(!resultSet.next()) {
-                if(dbHelper.addAuthor(arrayAuthor[0], arrayAuthor[1], arrayAuthor[2])) {
+            if (!resultSet.next()) {
+                if (dbHelper.addAuthor(arrayAuthor[0], arrayAuthor[1], arrayAuthor[2])) {
                     resultSet = dbHelper.getAuthorId(arrayAuthor[0], arrayAuthor[1], arrayAuthor[2]);
                     resultSet.next();
                 } else {
-                    Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении автора");
+                    Buildier.showErrorMessage("Error", "Error when adding an author");
                 }
             }
             id_author = resultSet.getLong(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting the list of authors");
         }
         return id_author;
     }
@@ -350,17 +230,17 @@ public class AdminOpportunities {
         ResultSet resultSet = dbHelper.getPublisherId(publisher);
         long id_publisher = -1;
         try {
-            if(!resultSet.next()) {
-                if(dbHelper.addPublisher(publisher)) {
+            if (!resultSet.next()) {
+                if (dbHelper.addPublisher(publisher)) {
                     resultSet = dbHelper.getPublisherId(publisher);
                     resultSet.next();
                 } else {
-                    Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении издателя");
+                    Buildier.showErrorMessage("Error", "Error when adding a publisher");
                 }
             }
             id_publisher = resultSet.getLong(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting the publisher");
         }
         return id_publisher;
     }
@@ -370,173 +250,129 @@ public class AdminOpportunities {
         ResultSet resultSet = dbHelper.getGenreId(genre);
         long id_genre = 0;
         try {
-            if(!resultSet.next()) {
-                if(dbHelper.addGenre(genre)) {
+            if (!resultSet.next()) {
+                if (dbHelper.addGenre(genre)) {
                     resultSet = dbHelper.getGenreId(genre);
                     resultSet.next();
                 } else {
-                    Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении жанра");
+                    Buildier.showErrorMessage("Error", "Error when adding a genre");
                 }
             }
             id_genre = resultSet.getLong(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting the genre");
         }
 
         return id_genre;
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void updateLibraryTable() {
+    public void updateLibraries() {
 
-        String sortLabel = String.valueOf(libraryPanel.fieldsList.getSelectedItem());
-        sortLabel =findLibraryColumnName(sortLabel);
+        String sortLabel = String.valueOf(libraryFieldList.getSelectedItem());
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
         DatabaseTableModel model = new DatabaseTableModel();
-        libraryPanel.libraryArrayList = new ArrayList<>();
+        libraryArrayList = new ArrayList<>();
         try {
             ResultSet libraries = dbHelper.getLibraries(sortLabel);
-            model.setDataSource(libraries, libraryPanel.columnsHeader);
-            libraryPanel.table.setModel(model);
-            libraryPanel.table.removeColumn(libraryPanel.table.getColumnModel().getColumn(0));
+            model.setDataSource(libraries, libraryHeaders);
+            libraryTable.setModel(model);
+            libraryTable.removeColumn(libraryTable.getColumnModel().getColumn(0));
 
             libraries = dbHelper.getLibraries(sortLabel);
-            libraryPanel.libraryArrayList.clear();
             while (libraries.next()) {
-                libraryPanel.libraryArrayList.add(new Library(libraries.getLong(1), libraries.getString(2), libraries.getString(3), libraries.getString(4)));
+                libraryArrayList.add(new Library(libraries.getLong(1),
+                        libraries.getString(2), libraries.getString(3),
+                        libraries.getString(4)));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when updating the library table");
         }
     }
 
-    public String findLibraryColumnName(String columnName) {
-        switch (columnName) {
-            case "Идентификатор":
-                return "id_library";
-            case "Библиотека":
-                return "name";
-            case "Адрес":
-                return "address";
-            case "Телефон":
-                return "telephone";
-        }
-        return "";
-    }
+    public boolean addLibrary(String name, String address, String phone) {
 
-    public boolean addLibrary(String name, String address, String phone){
-
-        if(name.length() == 0 || address.length() == 0 || phone.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Пустые поля");
-            return false;
-        }
-
-        if(dbHelper.existsLibrary(name, address, phone)) {
-            Buildier.ShowErrorMessage("Ошибка", "Библиотека с такими данными уже существует");
+        if (dbHelper.existsLibrary(name, address, phone, -1)) {
+            Buildier.showErrorMessage("Error", "A library with this data already exists");
             return false;
         }
 
         if (dbHelper.addLibrary(name, address, phone)) {
-            updateLibraryTable();
+            updateLibraries();
             return true;
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении библиотеки");
+            Buildier.showErrorMessage("Error", "Error adding the library");
             return false;
         }
     }
 
     public boolean redactLibrary(long id_library, String name, String address, String phone) {
 
-        if(name.length() == 0 || address.length() == 0 || phone.length() == 0) {
-            Buildier.ShowErrorMessage("Ошибка", "Пустые поля");
-            return false;
-        }
-
-        if(dbHelper.existsLibrary(name, address, phone)) {
-            Buildier.ShowErrorMessage("Ошибка", "Библиотека с такими данными уже существует");
+        if (dbHelper.existsLibrary(name, address, phone, id_library)) {
+            Buildier.showErrorMessage("Error", "A library with this data already exists");
             return false;
         }
 
         if (dbHelper.redactLibrary(id_library, name, address, phone)) {
-            updateLibraryTable();
+            updateLibraries();
             return true;
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при редактировании библиотеки");
+            Buildier.showErrorMessage("Error", "Error when editing the library");
             return false;
         }
     }
 
     public void deleteLibrary(long id_library) {
-        if(dbHelper.deleteLibrary(id_library)) {
-            updateLibraryTable();
+        if (dbHelper.deleteLibrary(id_library)) {
+            updateLibraries();
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при удалении библиотеки");
+            Buildier.showErrorMessage("Error", "Error deleting the library");
         }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void updateBookFundTable() {
+    public void updateBookFund() {
 
-        String sortLabel = String.valueOf(bfPanel.fieldsList.getSelectedItem());
-        sortLabel = findBfColumnName(sortLabel);
+        String sortLabel = String.valueOf(bfFieldList.getSelectedItem());
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
         DatabaseTableModel model = new DatabaseTableModel();
-        bfPanel.bfArrayList = new ArrayList<>();
+        bfArrayList = new ArrayList<>();
         try {
             ResultSet bookfund = dbHelper.getBookFund(sortLabel);
-            model.setDataSource(bookfund, bfPanel.columnsHeader);
-            bfPanel.table.setModel(model);
+            model.setDataSource(bookfund, bookFundHeaders);
+            bfTable.setModel(model);
+            bfTable.removeColumn(bfTable.getColumnModel().getColumn(0));
 
-            bookfund = dbHelper.getShortInfoBookFund(sortLabel);
+            bookfund = dbHelper.getBookFund(sortLabel);
             while (bookfund.next()) {
-                bfPanel.bfArrayList.add(new BookFund(bookfund.getLong(1), bookfund.getString(2), bookfund.getLong(3)));
+                bfArrayList.add(new BookFund(bookfund.getLong(1)));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when updating the book Fund table");
         }
 
     }
 
-    public String findBfColumnName(String columnName) {
-        switch (columnName) {
-            case "Автор": return "author";
-            case "Название": return "b.title";
-            case "Издательство": return "p.publisher";
-            case "Год издания": return "b.year";
-            case "Количество страниц": return "b.amount_pages";
-            case "Жанр": return "g.genre";
-            case "ISBN": return "b.ISBN";
-            case "Библиотека": return "l.name";
-            case "Адрес": return "l.address";
-            case "Телефон": return "l.telephone";
-        }
-        return "";
-    }
+    public boolean addBookFund(long id_library, String id_book, int amount) {
 
-    public boolean addBookFund(int booksIndex, int libraryIndex, int amount, BookFundRecord record) {
-        long id_library = record.librariesArrayList.get(libraryIndex).getId();
-        String id_book = record.booksArrayList.get(booksIndex).getISBN();
-
-        if(dbHelper.existsBookFund(id_book, id_library)) {
-            Buildier.ShowErrorMessage("Ошибка", "Запись об этой книге в данной библиотеке уже сущесвует");
+        if (dbHelper.existsBookFund(id_book, id_library, -1)) {
+            Buildier.showErrorMessage("Error", "There is already a record of this book in this library");
             return false;
         }
 
         if (dbHelper.addBookFund(id_book, id_library, amount, admin.getLogin())) {
-            updateBookFundTable();
+            updateBookFund();
             return true;
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении записи в книжном фонде");
             return false;
         }
     }
 
-    public boolean redactBookFund(long id_bookfund, int libraryIndex, int booksIndex, int amount, BookFundRecord record) {
+    public boolean redactBookFund(long id_bookfund, int libraryIndex, int booksIndex, int amount, ArrayList<Library> libraryRecordList, ArrayList<Book> bookRecordList) {
         ResultSet bookfund = dbHelper.findBookFund(id_bookfund);
         long id_library;
         String id_book;
@@ -545,43 +381,40 @@ public class AdminOpportunities {
             bookfund.next();
 
             if (libraryIndex != -1) {
-                id_library = record.librariesArrayList.get(libraryIndex).getId();
+                id_library = libraryRecordList.get(libraryIndex).getId();
             } else {
                 id_library = bookfund.getLong(2);
             }
 
             if (booksIndex != -1) {
-                id_book = record.booksArrayList.get(booksIndex).getISBN();
+                id_book = bookRecordList.get(booksIndex).getISBN();
             } else {
                 id_book = bookfund.getString(1);
             }
 
+            if (dbHelper.existsBookFund(id_book, id_library, id_bookfund)) {
+                Buildier.showErrorMessage("Error", "There is already a record of this book in this library");
+                return false;
+            }
+
             if (dbHelper.redactBookFund(id_bookfund, id_book, id_library, amount, admin.getLogin())) {
-                updateBookFundTable();
+                updateBookFund();
             } else {
-                Buildier.ShowErrorMessage("Ошибка", "Ошибка при редактировании записи в книжном фонде");
+                Buildier.showErrorMessage("Error", "Error when editing an entry in the book Fund");
             }
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }
 
     public void deleteBookFund(long id_bookfund) {
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
-        if(dbHelper.deleteBookFund(id_bookfund)) {
-            updateBookFundTable();
+        if (dbHelper.deleteBookFund(id_bookfund)) {
+            updateBookFund();
         } else {
-            Buildier.ShowErrorMessage("Ошибка", "Ошибка при удалении записи книжного фонда");
+            Buildier.showErrorMessage("Error", "Error when deleting a record book fund");
         }
-    }
-
-    public int getCurrentYear()
-    {
-        java.util.Calendar calendar = java.util.Calendar.getInstance(java.util.TimeZone.getDefault(), java.util.Locale.getDefault());
-        calendar.setTime(new java.util.Date());
-        return calendar.get(java.util.Calendar.YEAR);
     }
 
 }

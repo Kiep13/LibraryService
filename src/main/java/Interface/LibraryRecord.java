@@ -1,6 +1,7 @@
 package Interface;
 
 import BusinessLogic.AdminOpportunities;
+import BusinessLogic.Buildier;
 import BusinessLogic.DataBaseHelper;
 
 import javax.swing.*;
@@ -42,7 +43,7 @@ public class LibraryRecord extends JFrame {
             addressTextField.setText(library.getString(3));
             telephoneTextField.setText(library.getString(4));
         } catch(SQLException e) {
-             e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting record data");
         }
 
     }
@@ -60,39 +61,24 @@ public class LibraryRecord extends JFrame {
         setLayout(null);
         setResizable(false);
 
-        JPanel panel = new JPanel();
-        panel.setVisible(true);
-        panel.setBackground(Color.WHITE);
-        panel.setLocation(0, 0);
-        panel.setSize(getWidth(), getHeight());
-        panel.setLayout(null);
+        JPanel panel = Buildier.createPanel(getWidth(), getHeight());
 
-        ImageIcon icon = new ImageIcon("bookIcon.png");
+        ImageIcon icon = new ImageIcon(BusinessLogic.Buildier.getImage("Images/bookIcon.png"));
         setIconImage(icon.getImage());
 
-        nameLabel = new JLabel("Name");
-        nameLabel.setSize(70, 20);
-        nameLabel.setLocation(10, 30);
+        nameLabel = Buildier.createLabel("Name", 70, 20, 10, 30);
         panel.add(nameLabel);
 
-        addressLabel = new JLabel("Address");
-        addressLabel.setSize(70, 20);
-        addressLabel.setLocation(10, 60);
+        addressLabel = Buildier.createLabel("Address", 70, 20, 10, 60);
         panel.add(addressLabel);
 
-        telephoneLabel = new JLabel("Phone");
-        telephoneLabel.setSize(70, 20);
-        telephoneLabel.setLocation(10, 90);
+        telephoneLabel = Buildier.createLabel("Phone", 70, 20,10, 90);
         panel.add(telephoneLabel);
 
-        nameTextField = new JTextField();
-        nameTextField.setSize(200, 20);
-        nameTextField.setLocation(80, 30);
+        nameTextField = Buildier.createTextField(200, 20, 80, 30);
         panel.add(nameTextField);
 
-        addressTextField = new JTextField();
-        addressTextField.setSize(200, 20);
-        addressTextField.setLocation(80, 60);
+        addressTextField = Buildier.createTextField(200, 20, 80, 60);
         panel.add(addressTextField);
 
         MaskFormatter phoneFormatter;
@@ -106,10 +92,8 @@ public class LibraryRecord extends JFrame {
         telephoneTextField.setLocation(80, 90);
         panel.add(telephoneTextField);
 
-        save = new JButton("Save");
+        save = Buildier.createButton("Save", 80, 30, 115,120);
         save.addActionListener(e -> onButtonClick());
-        save.setSize(80, 30);
-        save.setLocation(115,120);
 
         panel.add(save);
 
@@ -122,6 +106,12 @@ public class LibraryRecord extends JFrame {
         String name = nameTextField.getText();
         String address = addressTextField.getText();
         String phone = telephoneTextField.getText();
+
+        if (name.length() == 0 || address.length() == 0 || phone.length() == 0) {
+            Buildier.showErrorMessage("Error", "Empty fields");
+            return;
+        }
+
 
         AdminOpportunities opportunities = AdminOpportunities.getInstance();
         if(id_library == -1) {

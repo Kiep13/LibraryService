@@ -11,9 +11,9 @@ public class CatalogPanel extends JPanel {
     JLabel fieldLabel;
     JButton searchButton;
 
-    public JTable table;
-    public JComboBox<Object> fieldsList;
-    public JComboBox<Object> libraryList;
+    JTable table;
+    JComboBox<Object> fieldsList;
+    JComboBox<Object> libraryList;
 
     public CatalogPanel(int width, int height) {
 
@@ -36,7 +36,7 @@ public class CatalogPanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        authorization = new JButton("Авторизация");
+        authorization = new JButton("Authorization");
 
         authorization.setMargin(zeroPaddings);
         authorization.setFocusPainted( false );
@@ -47,7 +47,7 @@ public class CatalogPanel extends JPanel {
 
         this.add(authorization, gbc);
 
-        sortLabel = new JLabel("Библиотека");
+        sortLabel = new JLabel("Library");
 
         gbc.gridy = 1;
 
@@ -57,13 +57,13 @@ public class CatalogPanel extends JPanel {
 
         libraryList = new JComboBox<>(librariesArray);
         libraryList.setMaximumRowCount(librariesArray.length);
-        libraryList.addActionListener(e -> opportunities.updateCatalogTable());
+        libraryList.addActionListener(e -> opportunities.viewListOfBooks());
 
         gbc.gridx = 1;
 
         this.add(libraryList, gbc);
 
-        fieldLabel = new JLabel("Сортировать по");
+        fieldLabel = new JLabel("Sort by");
 
         gbc.gridx = 2;
 
@@ -71,12 +71,12 @@ public class CatalogPanel extends JPanel {
 
         fieldsList = new JComboBox<Object>(UserOpportunities.headers);
         fieldsList.setMaximumRowCount(UserOpportunities.headers.length);
-        fieldsList.addActionListener(e -> opportunities.updateCatalogTable());
+        fieldsList.addActionListener(e -> opportunities.viewListOfBooks());
         gbc.gridx = 3;
 
         this.add(fieldsList, gbc);
 
-        searchButton = new JButton("Критерии поиска");
+        searchButton = new JButton("Search options");
         searchButton.addActionListener(e -> onSearchButtonClick());
 
         gbc.gridx = 4;
@@ -87,6 +87,10 @@ public class CatalogPanel extends JPanel {
 
         table = new JTable();
         table.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        opportunities.table = table;
+        opportunities.libraryList = libraryList;
+        opportunities.fieldsList = fieldsList;
 
         box.add(table);
         box.add(new JScrollPane(table));
@@ -102,6 +106,9 @@ public class CatalogPanel extends JPanel {
         gbc.insets = new Insets(5, 10, 10, 10);
 
         this.add(box, gbc);
+
+        UserOpportunities userOpportunities = UserOpportunities.getInstance();
+        userOpportunities.viewListOfBooks();
 
     }
 

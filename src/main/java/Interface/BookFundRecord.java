@@ -22,19 +22,19 @@ public class BookFundRecord extends JFrame {
     JTextField amountTextField;
     JButton save;
 
-    public ArrayList<Book> booksArrayList;
-    public ArrayList<Library> librariesArrayList;
+    ArrayList<Book> booksArrayList;
+    ArrayList<Library> librariesArrayList;
     long id_bookfund;
 
     public BookFundRecord() {
-        execute();
+        initialize();
         id_bookfund = -1;
 
     }
 
     public BookFundRecord(long id_bookfund) {
 
-        execute();
+        initialize();
         this.id_bookfund = id_bookfund;
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
@@ -45,24 +45,28 @@ public class BookFundRecord extends JFrame {
             String isbn = bookfund.getString(1);
             long id_library = bookfund.getLong(2);
 
-            ResultSet library = dbHelper.findLibraryById(id_library);
+            ResultSet library = dbHelper.findLibrary(id_library);
             library.next();
-            libraryList.setSelectedItem(library.getString(1));
+            libraryList.setEditable(true);
+            libraryList.setSelectedItem(library.getString(2));
+            libraryList.setEditable(false);
 
-            ResultSet book = dbHelper.findBookById(isbn);
+            ResultSet book = dbHelper.findBook(isbn);
             book.next();
-            bookList.setSelectedItem(book.getString(1));
+            bookList.setEditable(true);
+            bookList.setSelectedItem(book.getString(2) + " : " + book.getInt(7) + "г.");
+            bookList.setEditable(false);
 
             amountTextField.setText(bookfund.getString(3));
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting record data");
         }
 
 
     }
 
-    public void execute() {
+    public void initialize() {
 
         setTitle("BookFund record");
         setSize(310, 210);
@@ -75,24 +79,16 @@ public class BookFundRecord extends JFrame {
         setLayout(null);
         setResizable(false);
 
-        ImageIcon icon = new ImageIcon("bookIcon.png");
+        ImageIcon icon = new ImageIcon(BusinessLogic.Buildier.getImage("Images/bookIcon.png"));
         setIconImage(icon.getImage());
 
-        JPanel panel = new JPanel();
-        panel.setVisible(true);
-        panel.setBackground(Color.WHITE);
-        panel.setLocation(0, 0);
-        panel.setSize(getWidth(), getHeight());
-        panel.setLayout(null);
+        JPanel panel = Buildier.createPanel(getWidth(), getHeight());
 
-        libraryLabel = new JLabel("Library");
-        libraryLabel.setSize(70, 20);
-        libraryLabel.setLocation(10, 30);
-
+        libraryLabel = Buildier.createLabel("Library",70, 20, 10, 30);
         panel.add(libraryLabel);
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
-        ResultSet libraries = dbHelper.getShortInfoLibraries();
+        ResultSet libraries = dbHelper.getLibraries("Library");
         librariesArrayList = new ArrayList<>();
         try {
             while(libraries.next()) {
@@ -107,21 +103,18 @@ public class BookFundRecord extends JFrame {
         libraryList.setMaximumRowCount(librariesArray.length);
         libraryList.setSize(200, 20);
         libraryList.setLocation(80, 30);
-        libraryList.setEditable(true);
+        //libraryList.setEditable(true);
 
         panel.add(libraryList);
 
-        bookLabel = new JLabel("Book");
-        bookLabel.setSize(70, 20);
-        bookLabel.setLocation(10, 60);
-
+        bookLabel = Buildier.createLabel("Book", 70, 20,10, 60);
         panel.add(bookLabel);
 
-        ResultSet books = dbHelper.getShortInfoBooks();
+        ResultSet books = dbHelper.getBooks("Title");
         booksArrayList = new ArrayList<>();
         try {
             while(books.next()) {
-                booksArrayList.add(new Book(books.getString(1), books.getString(2), books.getInt(3)));
+                booksArrayList.add(new Book(books.getString(1), books.getString(2), books.getInt(7)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,29 +122,21 @@ public class BookFundRecord extends JFrame {
         Object [] booksArray = booksArrayList.toArray();
 
         bookList = new JComboBox<>(booksArray);
+        bookList.setMaximumRowCount(booksArray.length);
         bookList.setSize(200, 20);
         bookList.setLocation(80, 60);
-        bookList.setEditable(true);
+        //bookList.setEditable(true);
 
         panel.add(bookList);
 
-        amountLabel = new JLabel("Amount");
-        amountLabel.setSize(70, 20);
-        amountLabel.setLocation(10, 90);
-
+        amountLabel = Buildier.createLabel("Amount", 70, 20, 10, 90);
         panel.add(amountLabel);
 
-        amountTextField = new JTextField();
-        amountTextField.setSize(200, 20);
-        amountTextField.setLocation(80, 90);
-
+        amountTextField = Buildier.createTextField(200, 20, 80, 90);
         panel.add(amountTextField);
 
-        save = new JButton("Save");
+        save = Buildier.createButton("Save", 80, 30, 115, 120);
         save.addActionListener(e -> onButtonClick());
-        save.setSize(80, 30);
-        save.setLocation(115,120);
-
         panel.add(save);
 
         add(panel);
@@ -167,29 +152,32 @@ public class BookFundRecord extends JFrame {
         try{
             amount = Integer.parseInt(amountTextField.getText());
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Buildier.ShowErrorMessage("Ошибка", "Невозможно иденцифитровать количество экземпляров");
+            Buildier.showErrorMessage("Error", "The number of instances cannot be identified");
             return;
         }
 
         if(amount <=  0) {
-            Buildier.ShowErrorMessage("Ошибка", "Некорректное количество экземпляров");
+            Buildier.showErrorMessage("Error", "Invalid number of instances");
             return;
         }
 
         AdminOpportunities opportunities = AdminOpportunities.getInstance();
 
         if(id_bookfund != -1) {
-            if (opportunities.redactBookFund(id_bookfund, libraryIndex, booksIndex,  amount, this)) {
+            if (opportunities.redactBookFund(id_bookfund, libraryIndex, booksIndex,  amount, librariesArrayList, booksArrayList)) {
                 dispose();
             } else {
-                Buildier.ShowErrorMessage("Ошибка", "Ошибка при редактировании записи в книжном фонде");
+                Buildier.showErrorMessage("Error", "Error when editing an entry in the book Fund");
             }
         } else {
-            if (opportunities.addBookFund(booksIndex, libraryIndex, amount, this)) {
+            libraryIndex = libraryList.getSelectedIndex() != -1 ? libraryList.getSelectedIndex() : 0;
+            booksIndex = bookList.getSelectedIndex() != -1 ? bookList.getSelectedIndex() : 0;
+            long id_library = librariesArrayList.get(libraryIndex).getId();
+            String id_book = booksArrayList.get(booksIndex).getISBN();
+            if (opportunities.addBookFund(id_library, id_book, amount)) {
                 dispose();
             } else {
-                Buildier.ShowErrorMessage("Ошибка", "Ошибка при добавлении записи в книжном фонде");
+                Buildier.showErrorMessage("Error", "Error when adding an entry in the book Fund");
             }
         }
     }

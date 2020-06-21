@@ -1,7 +1,7 @@
 package Interface;
 
-import BusinessLogic.AdminOpportunities;
 import BusinessLogic.Buildier;
+import BusinessLogic.AdminOpportunities;
 import Data.Library;
 
 import javax.swing.*;
@@ -10,16 +10,13 @@ import java.util.ArrayList;
 
 public class LibraryPanel extends JPanel {
 
-    public JTable table;
+    JTable table;
     JLabel fieldLabel;
-    public JComboBox<Object> fieldsList;
+    JComboBox<Object> fieldsList;
 
     JButton add;
     JButton redact;
     JButton delete;
-
-    public String[] columnsHeader = new String [] {"Идентификатор", "Библиотека", "Адрес", "Телефон"};
-    public ArrayList<Library> libraryArrayList;
 
     public LibraryPanel() {
 
@@ -41,9 +38,11 @@ public class LibraryPanel extends JPanel {
         add(fieldLabel, gbc);
 
         AdminOpportunities opportunities = AdminOpportunities.getInstance();
-        fieldsList = new JComboBox<Object>(columnsHeader);
-        fieldsList.setMaximumRowCount(columnsHeader.length);
-        fieldsList.addActionListener(e -> opportunities.updateLibraryTable());
+        fieldsList = new JComboBox<Object>(opportunities.libraryHeaders);
+        fieldsList.setMaximumRowCount(opportunities.libraryHeaders.length);
+        fieldsList.removeItemAt(0);
+        fieldsList.setSelectedItem(fieldsList.getItemAt(0));
+        fieldsList.addActionListener(e -> opportunities.updateLibraries());
 
         gbc.gridx = 1;
 
@@ -53,16 +52,16 @@ public class LibraryPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setVisible(true);
 
-        add = Buildier.createIconButton(0, 0, new ImageIcon("add.png"));
+        add = Buildier.createIconButton(0, 0, new ImageIcon(BusinessLogic.Buildier.getImage("Images/add.png")));
         add.addActionListener(e -> onAddButtonClick());
         panel.add(add);
 
-        redact = Buildier.createIconButton(40, 0, new ImageIcon("redact.png"));
+        redact = Buildier.createIconButton(40, 0, new ImageIcon(BusinessLogic.Buildier.getImage("Images/redact.png")));
         redact.addActionListener(e -> onRedactButtonClick());
 
         panel.add(redact);
 
-        delete = Buildier.createIconButton(80, 0, new ImageIcon("delete.png"));
+        delete = Buildier.createIconButton(80, 0, new ImageIcon(BusinessLogic.Buildier.getImage("Images/delete.png")));
         delete.addActionListener(e -> onDeleteButtonClick());
 
         gbc.anchor = GridBagConstraints.EAST;
@@ -92,6 +91,10 @@ public class LibraryPanel extends JPanel {
 
         add(box, gbc);
 
+        opportunities.libraryTable = table;
+        opportunities.libraryFieldList = fieldsList;
+        opportunities.libraryArrayList = new ArrayList<Library>();
+
     }
 
     public void onAddButtonClick() {
@@ -101,7 +104,11 @@ public class LibraryPanel extends JPanel {
     public void onRedactButtonClick() {
 
         int index = table.getSelectedRow();
-        long id_library = libraryArrayList.get(index).getId();
+        if(index == -1) {
+            Buildier.showErrorMessage("Error", "The entry is not selected for editing!");
+            return;
+        }
+        long id_library = AdminOpportunities.getInstance().libraryArrayList.get(index).getId();
         new LibraryRecord(id_library);
 
     }
@@ -109,7 +116,11 @@ public class LibraryPanel extends JPanel {
     public void onDeleteButtonClick() {
 
         int index = table.getSelectedRow();
-        long id_library = libraryArrayList.get(index).getId();
+        if(index == -1) {
+            Buildier.showErrorMessage("Error", "The entry is not selected for deleting!");
+            return;
+        }
+        long id_library = AdminOpportunities.getInstance().libraryArrayList.get(index).getId();
 
         AdminOpportunities.getInstance().deleteLibrary(id_library);
 

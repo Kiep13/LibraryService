@@ -2,29 +2,19 @@ package Interface;
 
 import BusinessLogic.AdminOpportunities;
 import BusinessLogic.Buildier;
-import BusinessLogic.DataBaseHelper;
-import BusinessLogic.DatabaseTableModel;
-import Data.Book;
-import Data.Library;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class BookPanel extends JPanel {
 
-    public JTable table;
+    JTable table;
     JLabel fieldLabel;
-    public JComboBox<Object> fieldsList;
+    JComboBox<Object> fieldsList;
 
     JButton add;
     JButton redact;
     JButton delete;
-
-    public String[] columnsHeader = new String [] {"ISBN", "Название", "Автор", "Жанр", "Издатель", "Количество страниц", "Год"};
-    public ArrayList<Book> bookArrayList;
 
     public BookPanel() {
 
@@ -45,13 +35,12 @@ public class BookPanel extends JPanel {
 
         add(fieldLabel, gbc);
 
-        fieldsList = new JComboBox<Object>(columnsHeader);
-        fieldsList.setMaximumRowCount(columnsHeader.length);
-
         AdminOpportunities opportunities = AdminOpportunities.getInstance();
+        fieldsList = new JComboBox<Object>(opportunities.bookHeaders);
+        fieldsList.setMaximumRowCount(opportunities.bookHeaders.length);
         fieldsList.setSize(150, 20);
         fieldsList.setLocation(70, 10);
-        fieldsList.addActionListener(e -> opportunities.updateBookTable());
+        fieldsList.addActionListener(e -> opportunities.updateBooks());
 
         gbc.gridx = 1;
 
@@ -61,16 +50,16 @@ public class BookPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setVisible(true);
 
-        add = Buildier.createIconButton(0, 0, new ImageIcon("add.png"));
+        add = Buildier.createIconButton(0, 0, new ImageIcon(BusinessLogic.Buildier.getImage("Images/add.png")));
         add.addActionListener(e -> onAddButtonClick());
         panel.add(add);
 
-        redact = Buildier.createIconButton(40, 0, new ImageIcon("redact.png"));
+        redact = Buildier.createIconButton(40, 0, new ImageIcon(BusinessLogic.Buildier.getImage("Images/redact.png")));
         redact.addActionListener(e -> onRedactButtonClick());
 
         panel.add(redact);
 
-        delete = Buildier.createIconButton(80, 0, new ImageIcon("delete.png"));
+        delete = Buildier.createIconButton(80, 0, new ImageIcon(BusinessLogic.Buildier.getImage("Images/delete.png")));
         delete.addActionListener(e -> onDeleteButtonClick());
 
         gbc.anchor = GridBagConstraints.EAST;
@@ -100,6 +89,8 @@ public class BookPanel extends JPanel {
 
         add(box, gbc);
 
+        opportunities.bookTable = table;
+        opportunities.bookFieldList = fieldsList;
 
     }
 
@@ -108,15 +99,24 @@ public class BookPanel extends JPanel {
     }
 
     public void onRedactButtonClick()  {
+
         int index = table.getSelectedRow();
-        String isbn = bookArrayList.get(index).getISBN();
+        if(index == -1) {
+            Buildier.showErrorMessage("Error", "The entry is not selected for editing!");
+            return;
+        }
+        String isbn = AdminOpportunities.getInstance().bookArrayList.get(index).getISBN();
         new BookRecord(isbn);
     }
 
     public void onDeleteButtonClick() {
 
         int index = table.getSelectedRow();
-        String id_book = bookArrayList.get(index).getISBN();
+        if(index == -1) {
+            Buildier.showErrorMessage("Error", "The entry is not selected for deleting!");
+            return;
+        }
+        String id_book = AdminOpportunities.getInstance().bookArrayList.get(index).getISBN();
 
         AdminOpportunities opportunities = AdminOpportunities.getInstance();
         opportunities.deleteBook(id_book);

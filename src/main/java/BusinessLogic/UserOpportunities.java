@@ -1,8 +1,8 @@
 package BusinessLogic;
 
 import Data.Library;
-import Interface.CatalogPanel;
 
+import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class UserOpportunities {
 
     public DataBaseHelper dbHelper;
 
-    public static String[] headers = new String [] {"Автор", "Название", "Издательство", "Год издания", "Количество страниц", "Жанр", "ISBN", "Библиотека", "Адрес", "Телефон"};
+    public static String[] headers = new String [] {"Author", "Title", "Publisher", "Year", "Pages", "Genre", "ISBN", "Library", "Address", "Telephone", "Amount"};
     private ArrayList<Library> librariesArrayList;
 
     public String titleMack;
@@ -27,7 +27,9 @@ public class UserOpportunities {
     public int yearMin;
     public int yearMax;
 
-    CatalogPanel catalogPanel;
+    public JTable table;
+    public JComboBox<Object> libraryList;
+    public JComboBox<Object> fieldsList;
 
     private UserOpportunities() {
 
@@ -52,13 +54,9 @@ public class UserOpportunities {
         return opportunities;
     }
 
-    public void setCatalogPanel(CatalogPanel panel) {
-        this.catalogPanel = panel;
-    }
-
     public ArrayList<Library> getLibrariesList() {
 
-        ResultSet libraries = dbHelper.getShortInfoLibraries();
+        ResultSet libraries = dbHelper.getLibraries("Library");
         librariesArrayList = new ArrayList<>();
         librariesArrayList.add(new Library(0, "Все", ""));
         try {
@@ -66,14 +64,14 @@ public class UserOpportunities {
                 librariesArrayList.add(new Library(libraries.getLong(1), libraries.getString(2), libraries.getString(3)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when getting the list of libraries");
         }
         return librariesArrayList;
     }
 
-    public void updateCatalogTable() {
+    public void viewListOfBooks() {
 
-        int index = catalogPanel.libraryList.getSelectedIndex();
+        int index = libraryList.getSelectedIndex();
         String id_library;
         if(index == 0){
             id_library = "%";
@@ -81,35 +79,18 @@ public class UserOpportunities {
             id_library = String.valueOf(librariesArrayList.get(index).getId());
         }
 
-        String sortLabel = Objects.requireNonNull(catalogPanel.fieldsList.getSelectedItem()).toString();
-        sortLabel = findColumnName(sortLabel);
+        String sortLabel = Objects.requireNonNull(fieldsList.getSelectedItem()).toString();
 
         DataBaseHelper dbHelper = DataBaseHelper.getInstance();
         DatabaseTableModel model = new DatabaseTableModel();
         try {
             ResultSet bookfund = dbHelper.getCatalog(sortLabel, id_library, titleMack, genreMack, authorMack, publisherMask, isbnMack, pageMin, pageMax, yearMin, yearMax);
             model.setDataSource(bookfund, headers);
-            catalogPanel.table.setModel(model);
+            table.setModel(model);
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            Buildier.showErrorMessage("Error", "Errors when updating the table");
         }
 
-    }
-
-    public String findColumnName(String columnName) {
-        switch (columnName) {
-            case "Автор": return "author";
-            case "Название": return "b.title";
-            case "Издательство": return "p.publisher";
-            case "Год издания": return "b.year";
-            case "Количество страниц": return "b.amount_pages";
-            case "Жанр": return "g.genre";
-            case "ISBN": return "b.ISBN";
-            case "Библиотека": return "l.name";
-            case "Адрес": return "l.address";
-            case "Телефон": return "l.telephone";
-        }
-        return "";
     }
 
 }
